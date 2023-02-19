@@ -18,3 +18,5 @@ Example:
 ```
 
 The preceeding example will execute the function memory_injection from our DLL and will give the argument 'CFF Explorer' to our function, arguments are passed as `std::vector<void*>` and are casted back into their right type in the function you want to execute.
+
+If you write a function that requires arguments, make sure you verify the user actually passed these arguments to the function else you can stop the execution of it.
