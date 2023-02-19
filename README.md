@@ -28,4 +28,4 @@ Then you can compile the program with vscode `ctrl + shift + p` -> `CMAKE: confi
 
 You can then run your functions with `.\dynocall.exe myFunction argument1 argument2`, note that this project was principally made so that i can use it (not for the public), but the repository is still publicly available for whoever wants to use this or make something similar.
 
-If you are having trouble understanding how to use the program, the program currently exports 2 functions, `back_inserter` and `memory injection`, those functions are declared inside the `back_inserter.h` and `memory_injection.h` file, you are free to look at those to see how it works.
+If you are having trouble understanding how to use the program, the DLL currently exports 2 functions, `back_inserter` and `memory injection`, those functions are declared inside the `back_inserter.h` and `memory_injection.h` file, you are free to look at those to see how it works.
