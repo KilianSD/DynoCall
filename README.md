@@ -20,3 +20,12 @@ Example:
 The preceeding example will execute the function memory_injection from our DLL and will give the argument 'CFF Explorer' to our function, arguments are passed as `std::vector<void*>` and are casted back into their right type in the function you want to execute.
 
 If you write a function that requires arguments, make sure you verify the user actually passed these arguments to the function else you can stop the execution of it.
+
+# How to use
+To use this program, you're gonna need to write your code as header files (.h) in the include directory, then you are going to include these header files in `src/dynocall_lib.cpp`, make sure you put the functions you want to export as `extern "C"` and put the EXPORT macro in your function definitions (`void* EXPORT myFunction(){};`).
+
+Then you can compile the program with vscode `ctrl + shift + p` -> `CMAKE: configure` -> `ctrl + shift + p` -> `CMAKE: build release`, this will build the executable and the DLL in the bin folder.
+
+You can then run your functions with `.\dynocall.exe myFunction argument1 argument2`, note that this project was principally made so that i can use it (not for the public), but the repository is still publicly available for whoever wants to use this or make something similar.
+
+If you are having trouble understanding how to use the program, the program currently exports 2 functions, `back_inserter` and `memory injection`, those functions are declared inside the `back_inserter.h` and `memory_injection.h` file, you are free to look at those to see how it works.
