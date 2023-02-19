@@ -1,7 +1,7 @@
 # DynoCall
 DynoCall is a simple program that facilitates the learning of C++. 
 
-When learning C++ you will usually have to write many different files to test the language. This will usually result in you being disorganized and having a bunch of binaries that all achieve a really simple task. 
+When learning C++ you will tend to write many different files to test the language. This will usually result in you being disorganized and having a bunch of binaries that all achieve a really simple task. 
 
 Instead you can write your code in header files and include them in the DLL main file (dynocall_lib.cpp) then from our executable we can call this function by it to our executable as the first argument.
 
@@ -24,9 +24,16 @@ The preceeding example will execute the function memory_injection from our DLL a
 If you write a function that requires arguments, make sure you verify the user actually passed these arguments to the function else you can stop the execution of it.
 
 # How to use
-To use this program, you're gonna need to write your code as header files (.h) in the include directory, then you are going to include these header files in `src/dynocall_lib.cpp`, make sure you put the functions you want to export as `extern "C"` and put the EXPORT macro in your function definitions (`void* EXPORT myFunction(){};`).
+To use this program, you're gonna need to write your code as header files (.h) in the include directory, then you are going to include these header files in `src/dynocall_lib.cpp`, make sure you put the functions you want to export as `extern "C"` and put the `EXPORT` macro in your function definitions (`void* EXPORT myFunction(){};`).
 
 Then you can compile the program with vscode `ctrl + shift + p` -> `CMAKE: configure` -> `ctrl + shift + p` -> `CMAKE: build release`, this will build the executable and the DLL in the bin folder.
+
+Or you can compile the program manually with the following commands (note that you will need to provide your own paths for the toolchain file and the cmake prefix path) :
+```
+cd build
+cmake .. -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_PREFIX_PATH=C:/vcpkg/installed/x64-windows
+cmake --build . --config Release
+```
 
 You can then run your functions with `.\dynocall.exe myFunction argument1 argument2`, note that this project was principally made so that i can use it (not for the public), but the repository is still publicly available for whoever wants to use this or make something similar.
 
