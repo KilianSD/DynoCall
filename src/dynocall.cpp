@@ -4,7 +4,6 @@
 #include <fmt/core.h>
 #include <fmt/color.h>
 
-
 typedef void (*FuncxType)(std::vector<void*>);
 
 int main(int argc, char* argv[]){
@@ -35,7 +34,6 @@ int main(int argc, char* argv[]){
     std::vector<void*> args;
     if(argc > 2){
         for(int i = 2; i < argc; i++){
-            std::cout << argv[i] << std::endl;
             args.push_back((void*)argv[i]);
         }
     }

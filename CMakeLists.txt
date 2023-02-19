@@ -9,6 +9,64 @@ if(CMAKE_CXX_STANDARD LESS 17)
     message(FATAL_ERROR "ERROR: DynoCall, requires atleast a <= C++17 compatible compiler to build. Please make sure you have enabled C++ 17 support in your compiler flags. If C++ 17 support is already enabled and you are still encountering this error, please check that your CMakeLists.txt file is configured correctly. If you are unsure how to enable C++17 support in your compiler flags, please refer to your compiler's documentation.")
 endif()
 
+# Set the vcpkg directory path
+set(VCPKG_DIR "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg")
+set(VCPKG_EXE "${VCPKG_DIR}/vcpkg.exe")
+
+# Check OS for archive decompression Command
+if(WIN32)
+    set(UNZIP_COMMAND "unzip")
+elseif(UNIX)
+    set(UNZIP_COMMAND "tar -zxf")
+endif()
+
+# Check if the VCPKG directory exists
+if(NOT EXISTS ${VCPKG_DIR})
+    # If the VCPKG directory does not exist, download and install vcpkg
+    message(STATUS "vcpkg not found, installing...")
+    if(NOT EXISTS "${VCPKG_DIR}.zip")
+        message(STATUS "vcpkg archive not found, downloading and extracting...")
+        file(DOWNLOAD "https://github.com/microsoft/vcpkg/archive/master.zip" "${VCPKG_DIR}.zip")
+    else()
+        message(STATUS "vcpkg archive found, extracting...")
+    endif()
+    
+    if(NOT EXISTS "${VCPKG_DIR}-master")
+        if(WIN32)
+            execute_process(COMMAND ${UNZIP_COMMAND} "${VCPKG_DIR}.zip" -q -d "${CMAKE_CURRENT_SOURCE_DIR}" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+        elseif(UNIX)
+            execute_process(COMMAND ${UNZIP_COMMAND} "${VCPKG_DIR}.zip" -q -C "${CMAKE_CURRENT_SOURCE_DIR}" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+        endif()
+    endif()
+
+    file(RENAME ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg-master ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg)
+
+    execute_process(COMMAND "${VCPKG_DIR}/bootstrap-vcpkg.bat")
+    execute_process(COMMAND ${VCPKG_DIR}/vcpkg.exe integrate install)
+    endif()
+    
+    # Set the vcpkg toolchain file
+    set(VCPKG_TOOLCHAIN_FILE "${VCPKG_DIR}/scripts/buildsystems/vcpkg.cmake")
+    
+    # Tell CMake to use the vcpkg toolchain file
+    set(CMAKE_TOOLCHAIN_FILE ${VCPKG_TOOLCHAIN_FILE})
+    set(CMAKE_PREFIX_PATH "${VCPKG_DIR}/installed/x64-windows")
+    
+    # Find Packages
+    find_package(fmt CONFIG)
+    
+    if (NOT fmt_FOUND)
+        message("formatting Library not found, installing...")
+        execute_process(COMMAND ${VCPKG_DIR}/vcpkg.exe install fmt:x64-windows RESULT_VARIABLE result)
+    
+        if(result)
+            message(FATAL_ERROR "failed to install formatting library !")
+        else()
+            find_package(fmt CONFIG REQUIRED)
+        endif()
+    endif()
+    
+
 # Define FuncX Project
 project(FuncX LANGUAGES CXX)
 
@@ -32,16 +90,11 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 
-# Find Packages
-find_package(fmt CONFIG REQUIRED)
 
-if (NOT fmt_FOUND)
-message(FATAL_ERROR "Formatting Library not Found.")
-endif()
 
 # Set Include Header Path
 include_directories(
-    C:/vcpkg/installed/${VCPKG_TARGET_TRIPLET}/include
+    ${VCPKG_DIR}/installed/${VCPKG_TARGET_TRIPLET}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
