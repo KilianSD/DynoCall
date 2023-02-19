@@ -1,5 +1,5 @@
 # DynoCall
-DynoCall is a simple program that facilitates learning C++. 
+DynoCall is a simple program that facilitates the learning of C++. 
 
 When learning C++ you will usually have to write many different files to test the language. This will usually result in you being disorganized and having a bunch of binaries that all achieve a really simple task. 
 
